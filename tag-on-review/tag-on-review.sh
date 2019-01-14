@@ -32,7 +32,7 @@ main(){
 
 	echo "DEBUG -> action: $action merged: $pr_url"
 
-    if [[ "$action" == "dismissed"]] ; then
+    if [[ "$action" == "dismissed" ]] ; then
       echo "DEBUG: do dismissed later"
     fi
 
