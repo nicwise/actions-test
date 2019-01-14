@@ -4,6 +4,6 @@ workflow "on review approve, tag as ready to land" {
 }
 
 action "tag on approve" {
-    uses = "nicwise/tag-on-review@master"
+    uses = "./tag-on-review/"
     secrets = ["GITHUB_TOKEN"]
 }

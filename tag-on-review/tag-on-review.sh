@@ -30,6 +30,8 @@ main(){
     echo "MSG $GITHUB_EVENT_PATH"
 	echo "DEBUG -> action: $action merged: $merged"
 
+    
+
 	# if [[ "$action" == "closed" ]] && [[ "$merged" == "true" ]]; then
     #     # We only care about the closed event and if it was merged.
     #     # If so, delete the branch.
