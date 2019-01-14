@@ -47,7 +47,6 @@ main(){
         curl -XDELETE -sSL \
             -H "${AUTH_HEADER}" \
 			-H "${API_HEADER}" \
-            "${pr_url}/labels/ready+for+review"
             "${issue_url}/labels/ready+for+review"
 
          curl -XPOST -sSL \
