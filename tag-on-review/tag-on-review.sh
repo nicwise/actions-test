@@ -42,7 +42,7 @@ main(){
         ref=$(jq --raw-output .pull_request.head.ref "$GITHUB_EVENT_PATH")
 		owner=$(jq --raw-output .pull_request.head.repo.owner.login "$GITHUB_EVENT_PATH")
 		repo=$(jq --raw-output .pull_request.head.repo.name "$GITHUB_EVENT_PATH")
-        issue_url=$(jq --raw-output .pull_request._links.issue "$GITHUB_EVENT_PATH")
+        issue_url=$(jq --raw-output .pull_request._links.issue.href "$GITHUB_EVENT_PATH")
 
         curl -XDELETE -sSL \
             -H "${AUTH_HEADER}" \
