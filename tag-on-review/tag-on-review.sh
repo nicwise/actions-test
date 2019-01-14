@@ -27,35 +27,36 @@ main(){
 	action=$(jq --raw-output .action "$GITHUB_EVENT_PATH")
 	merged=$(jq --raw-output .pull_request.merged "$GITHUB_EVENT_PATH")
 
+    echo "MSG $GITHUB_EVENT_PATH"
 	echo "DEBUG -> action: $action merged: $merged"
 
-	if [[ "$action" == "closed" ]] && [[ "$merged" == "true" ]]; then
-        # We only care about the closed event and if it was merged.
-        # If so, delete the branch.
-		ref=$(jq --raw-output .pull_request.head.ref "$GITHUB_EVENT_PATH")
-		owner=$(jq --raw-output .pull_request.head.repo.owner.login "$GITHUB_EVENT_PATH")
-		repo=$(jq --raw-output .pull_request.head.repo.name "$GITHUB_EVENT_PATH")
-		default_branch=$(
- 			curl -XGET -sSL \
-				-H "${AUTH_HEADER}" \
- 				-H "${API_HEADER}" \
-				"${URI}/repos/${owner}/${repo}" | jq .default_branch
-		)
+	# if [[ "$action" == "closed" ]] && [[ "$merged" == "true" ]]; then
+    #     # We only care about the closed event and if it was merged.
+    #     # If so, delete the branch.
+	# 	ref=$(jq --raw-output .pull_request.head.ref "$GITHUB_EVENT_PATH")
+	# 	owner=$(jq --raw-output .pull_request.head.repo.owner.login "$GITHUB_EVENT_PATH")
+	# 	repo=$(jq --raw-output .pull_request.head.repo.name "$GITHUB_EVENT_PATH")
+	# 	default_branch=$(
+ 	# 		curl -XGET -sSL \
+	# 			-H "${AUTH_HEADER}" \
+ 	# 			-H "${API_HEADER}" \
+	# 			"${URI}/repos/${owner}/${repo}" | jq .default_branch
+	# 	)
 
-		if [[ "$ref" == "$default_branch" ]]; then
-			# Never delete the default branch.
-			echo "Will not delete default branch (${default_branch}) for ${owner}/${repo}, exiting."
-			exit 0
-		fi
+	# 	if [[ "$ref" == "$default_branch" ]]; then
+	# 		# Never delete the default branch.
+	# 		echo "Will not delete default branch (${default_branch}) for ${owner}/${repo}, exiting."
+	# 		exit 0
+	# 	fi
 
-		echo "Deleting branch ref $ref for owner ${owner}/${repo}..."
-		curl -XDELETE -sSL \
-			-H "${AUTH_HEADER}" \
-			-H "${API_HEADER}" \
-			"${URI}/repos/${owner}/${repo}/git/refs/heads/${ref}"
+	# 	echo "Deleting branch ref $ref for owner ${owner}/${repo}..."
+	# 	curl -XDELETE -sSL \
+	# 		-H "${AUTH_HEADER}" \
+	# 		-H "${API_HEADER}" \
+	# 		"${URI}/repos/${owner}/${repo}/git/refs/heads/${ref}"
 
-		echo "Branch delete success!"
-	fi
+	# 	echo "Branch delete success!"
+	# fi
 }
 
 main "$@"
