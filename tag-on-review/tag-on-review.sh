@@ -32,13 +32,13 @@ main(){
 
 	echo "DEBUG -> action: $action merged: $pr_url"
 
-    if [[ "$action" == "dismissed"]]; then
+    if [[ "$action" == "dismissed"]] ; then
       echo "DEBUG: do dismissed later"
     fi
 
     
 
-	if [[ "$action" == "submitted" ]]; then
+	if [[ "$action" == "submitted" ]] ; then
         echo "DEBUG: sbumitted"
         # ref=$(jq --raw-output .pull_request.head.ref "$GITHUB_EVENT_PATH")
 		# owner=$(jq --raw-output .pull_request.head.repo.owner.login "$GITHUB_EVENT_PATH")
