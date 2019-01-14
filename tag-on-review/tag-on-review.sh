@@ -47,12 +47,12 @@ main(){
         curl -XDELETE -sSL \
             -H "${AUTH_HEADER}" \
 			-H "${API_HEADER}" \
-            "${issue_url}/labels/ready+for+review"
+            "${issue_url}/labels/ready%20for%20review"
 
          curl -XPOST -sSL \
             -H "${AUTH_HEADER}" \
 			-H "${API_HEADER}" \
-            --data '{"labels": "ready to land"}' \
+            --data '{"labels": ["ready to land"]}' \
             "${issue_url}/labels"
 
         echo "all done"
