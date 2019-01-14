@@ -1,3 +1,3 @@
 # actions-test
 
-foo
+foo bar
