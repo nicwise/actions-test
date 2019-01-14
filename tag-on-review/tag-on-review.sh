@@ -24,41 +24,55 @@ main(){
     # populated. This file holds the JSON data for the event that was triggered.
     # From that we can get the status of the pull request and if it was merged.
     # In this case we only care if it was closed and it was merged.
-	action=$(jq --raw-output .action "$GITHUB_EVENT_PATH")
-	merged=$(jq --raw-output .pull_request.merged "$GITHUB_EVENT_PATH")
 
-    echo "MSG $GITHUB_EVENT_PATH"
-	echo "DEBUG -> action: $action merged: $merged"
+    cat $GITHUB_EVENT_PATH
+
+	action=$(jq --raw-output .action "$GITHUB_EVENT_PATH")
+	pr_url=$(jq --raw-output .pull_request.url "$GITHUB_EVENT_PATH")
+
+	echo "DEBUG -> action: $action merged: $pr_url"
+
+    if [[ "$action" == "dismissed"]]; then
+      echo "DEBUG: do dismissed later"
+    fi
 
     
 
-	# if [[ "$action" == "closed" ]] && [[ "$merged" == "true" ]]; then
-    #     # We only care about the closed event and if it was merged.
-    #     # If so, delete the branch.
-	# 	ref=$(jq --raw-output .pull_request.head.ref "$GITHUB_EVENT_PATH")
-	# 	owner=$(jq --raw-output .pull_request.head.repo.owner.login "$GITHUB_EVENT_PATH")
-	# 	repo=$(jq --raw-output .pull_request.head.repo.name "$GITHUB_EVENT_PATH")
-	# 	default_branch=$(
- 	# 		curl -XGET -sSL \
-	# 			-H "${AUTH_HEADER}" \
- 	# 			-H "${API_HEADER}" \
-	# 			"${URI}/repos/${owner}/${repo}" | jq .default_branch
-	# 	)
+	if [[ "$action" == "submitted" ]]; then
+        echo "DEBUG: sbumitted"
+        # ref=$(jq --raw-output .pull_request.head.ref "$GITHUB_EVENT_PATH")
+		# owner=$(jq --raw-output .pull_request.head.repo.owner.login "$GITHUB_EVENT_PATH")
+		# repo=$(jq --raw-output .pull_request.head.repo.name "$GITHUB_EVENT_PATH")
 
-	# 	if [[ "$ref" == "$default_branch" ]]; then
-	# 		# Never delete the default branch.
-	# 		echo "Will not delete default branch (${default_branch}) for ${owner}/${repo}, exiting."
-	# 		exit 0
-	# 	fi
+        # curl -sSL \
+        #     -H "${AUTH_HEADER}" \
+		# 	-H "${API_HEADER}" \
+        #     "${URI}/repos/${owner}/${repo}/issues/"
 
-	# 	echo "Deleting branch ref $ref for owner ${owner}/${repo}..."
-	# 	curl -XDELETE -sSL \
-	# 		-H "${AUTH_HEADER}" \
-	# 		-H "${API_HEADER}" \
-	# 		"${URI}/repos/${owner}/${repo}/git/refs/heads/${ref}"
+        # # We only care about the closed event and if it was merged.
+        # # If so, delete the branch.
+	
+		# default_branch=$(
+ 		# 	curl -XGET -sSL \
+		# 		-H "${AUTH_HEADER}" \
+ 		# 		-H "${API_HEADER}" \
+		# 		"${URI}/repos/${owner}/${repo}" | jq .default_branch
+		# )
 
-	# 	echo "Branch delete success!"
-	# fi
+		# if [[ "$ref" == "$default_branch" ]]; then
+		# 	# Never delete the default branch.
+		# 	echo "Will not delete default branch (${default_branch}) for ${owner}/${repo}, exiting."
+		# 	exit 0
+		# fi
+
+		# echo "Deleting branch ref $ref for owner ${owner}/${repo}..."
+		# curl -XDELETE -sSL \
+		# 	-H "${AUTH_HEADER}" \
+		# 	-H "${API_HEADER}" \
+		# 	"${URI}/repos/${owner}/${repo}/git/refs/heads/${ref}"
+
+		# echo "Branch delete success!"
+	fi
 }
 
 main "$@"
